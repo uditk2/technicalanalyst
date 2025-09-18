@@ -1,13 +1,13 @@
 # Technical Analyst
 
-A FastAPI-based service for ingesting real-time stock feed data into TimescaleDB with TOTP authentication and monitoring dashboard.
+A FastAPI-based service for ingesting real-time stock feed data into TimescaleDB with TOTP authentication and monitoring ingestion pane.
 
 ## Features
 
 - Real-time stock data ingestion via Kotak Neo WebSocket API
 - TimescaleDB for efficient time-series data storage
 - TOTP authentication for secure access
-- Live monitoring dashboard
+- Live monitoring ingestion pane
 - Docker containerization
 
 ## Quick Start

@@ -66,7 +66,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 2. **Subscription**: Select instruments via web UI or API
 3. **Real-time Data**: WebSocket connection streams market data
 4. **Storage**: Data buffered and bulk-inserted into TimescaleDB
-5. **Monitoring**: Live dashboard shows ingestion status and stats
+5. **Monitoring**: Live ingestion pane shows ingestion status and stats
 
 ### Key Dependencies
 
