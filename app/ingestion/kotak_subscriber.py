@@ -4,6 +4,7 @@ from neo_api_client import NeoAPI, BaseUrl
 import logging
 
 from .config import ingestion_config
+from app.config import get_default_subscription_instruments, format_for_kotak_api
 
 logger = logging.getLogger(__name__)
 
@@ -114,11 +115,9 @@ class KotakNeoSubscriber:
             if not self.is_authenticated:
                 return {"success": False, "error": "Not authenticated"}
 
-            # Default instruments if none provided - same as in notebook
+            # Default instruments if none provided - use centralized config
             if not instruments:
-                instruments = [
-                    {'instrument_token': '11536', 'exchange_segment': 'nse_cm'},
-                ]
+                instruments = get_default_subscription_instruments()
 
             self.subscribed_instruments = instruments
 

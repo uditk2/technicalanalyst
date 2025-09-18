@@ -1,0 +1,418 @@
+[
+  {
+    "instrument_token": "Nifty 50",
+    "exchange_segment": "nse_cm",
+    "symbol": "NIFTY",
+    "company_name": "Nifty 50 Index",
+    "sector": "Index",
+    "instrument_type": "index"
+  },
+  {
+    "instrument_token": "Bank Nifty",
+    "exchange_segment": "nse_cm",
+    "symbol": "BANKNIFTY",
+    "company_name": "Bank Nifty Index",
+    "sector": "Index",
+    "instrument_type": "index"
+  },
+  {
+    "instrument_token": "11536",
+    "exchange_segment": "nse_cm",
+    "symbol": "RELIANCE",
+    "company_name": "Reliance Industries Limited",
+    "sector": "Oil & Gas",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "11532",
+    "exchange_segment": "nse_cm",
+    "symbol": "HDFCBANK",
+    "company_name": "HDFC Bank Limited",
+    "sector": "Banking",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1594",
+    "exchange_segment": "nse_cm",
+    "symbol": "TCS",
+    "company_name": "Tata Consultancy Services Limited",
+    "sector": "Information Technology",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2475",
+    "exchange_segment": "nse_cm",
+    "symbol": "BHARTIARTL",
+    "company_name": "Bharti Airtel Limited",
+    "sector": "Telecommunications",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "11915",
+    "exchange_segment": "nse_cm",
+    "symbol": "ICICIBANK",
+    "company_name": "ICICI Bank Limited",
+    "sector": "Banking",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "3045",
+    "exchange_segment": "nse_cm",
+    "symbol": "SBIN",
+    "company_name": "State Bank of India",
+    "sector": "Banking",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "3045",
+    "exchange_segment": "nse_cm",
+    "symbol": "INFY",
+    "company_name": "Infosys Limited",
+    "sector": "Information Technology",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "81",
+    "exchange_segment": "nse_cm",
+    "symbol": "BAJFINANCE",
+    "company_name": "Bajaj Finance Limited",
+    "sector": "Financial Services",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2885",
+    "exchange_segment": "nse_cm",
+    "symbol": "HINDUNILVR",
+    "company_name": "Hindustan Unilever Limited",
+    "sector": "FMCG",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "424",
+    "exchange_segment": "nse_cm",
+    "symbol": "ITC",
+    "company_name": "ITC Limited",
+    "sector": "Consumer Goods",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1232",
+    "exchange_segment": "nse_cm",
+    "symbol": "LT",
+    "company_name": "Larsen & Toubro Limited",
+    "sector": "Engineering & Construction",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "6401",
+    "exchange_segment": "nse_cm",
+    "symbol": "MARUTI",
+    "company_name": "Maruti Suzuki India Limited",
+    "sector": "Automobile",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "969",
+    "exchange_segment": "nse_cm",
+    "symbol": "M&M",
+    "company_name": "Mahindra & Mahindra Limited",
+    "sector": "Automobile",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "738",
+    "exchange_segment": "nse_cm",
+    "symbol": "KOTAKBANK",
+    "company_name": "Kotak Mahindra Bank Limited",
+    "sector": "Banking",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "7229",
+    "exchange_segment": "nse_cm",
+    "symbol": "HCLTECH",
+    "company_name": "HCL Technologies Limited",
+    "sector": "Information Technology",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "5258",
+    "exchange_segment": "nse_cm",
+    "symbol": "SUNPHARMA",
+    "company_name": "Sun Pharmaceutical Industries Limited",
+    "sector": "Pharmaceuticals",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "3456",
+    "exchange_segment": "nse_cm",
+    "symbol": "ULTRACEMCO",
+    "company_name": "UltraTech Cement Limited",
+    "sector": "Cement",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1270",
+    "exchange_segment": "nse_cm",
+    "symbol": "AXISBANK",
+    "company_name": "Axis Bank Limited",
+    "sector": "Banking",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "4632",
+    "exchange_segment": "nse_cm",
+    "symbol": "BAJAJFINSV",
+    "company_name": "Bajaj Finserv Limited",
+    "sector": "Financial Services",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "5900",
+    "exchange_segment": "nse_cm",
+    "symbol": "NTPC",
+    "company_name": "NTPC Limited",
+    "sector": "Power",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "5900",
+    "exchange_segment": "nse_cm",
+    "symbol": "TITAN",
+    "company_name": "Titan Company Limited",
+    "sector": "Consumer Goods",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "15083",
+    "exchange_segment": "nse_cm",
+    "symbol": "ADANIPORTS",
+    "company_name": "Adani Ports and Special Economic Zone Limited",
+    "sector": "Infrastructure",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1043",
+    "exchange_segment": "nse_cm",
+    "symbol": "BEL",
+    "company_name": "Bharat Electronics Limited",
+    "sector": "Defense",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "4963",
+    "exchange_segment": "nse_cm",
+    "symbol": "ONGC",
+    "company_name": "Oil and Natural Gas Corporation Limited",
+    "sector": "Oil & Gas",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "25",
+    "exchange_segment": "nse_cm",
+    "symbol": "ADANIENT",
+    "company_name": "Adani Enterprises Limited",
+    "sector": "Conglomerate",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2918",
+    "exchange_segment": "nse_cm",
+    "symbol": "JSWSTEEL",
+    "company_name": "JSW Steel Limited",
+    "sector": "Steel",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "784",
+    "exchange_segment": "nse_cm",
+    "symbol": "WIPRO",
+    "company_name": "Wipro Limited",
+    "sector": "Information Technology",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1406",
+    "exchange_segment": "nse_cm",
+    "symbol": "POWERGRID",
+    "company_name": "Power Grid Corporation of India Limited",
+    "sector": "Power Transmission",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "884",
+    "exchange_segment": "nse_cm",
+    "symbol": "TATAMOTORS",
+    "company_name": "Tata Motors Limited",
+    "sector": "Automobile",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1348",
+    "exchange_segment": "nse_cm",
+    "symbol": "TATASTEEL",
+    "company_name": "Tata Steel Limited",
+    "sector": "Steel",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2031",
+    "exchange_segment": "nse_cm",
+    "symbol": "ASIANPAINT",
+    "company_name": "Asian Paints Limited",
+    "sector": "Paints",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "235",
+    "exchange_segment": "nse_cm",
+    "symbol": "TECHM",
+    "company_name": "Tech Mahindra Limited",
+    "sector": "Information Technology",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1102",
+    "exchange_segment": "nse_cm",
+    "symbol": "GRASIM",
+    "company_name": "Grasim Industries Limited",
+    "sector": "Chemicals",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2181",
+    "exchange_segment": "nse_cm",
+    "symbol": "BRITANNIA",
+    "company_name": "Britannia Industries Limited",
+    "sector": "FMCG",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "4963",
+    "exchange_segment": "nse_cm",
+    "symbol": "COALINDIA",
+    "company_name": "Coal India Limited",
+    "sector": "Mining",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "4717",
+    "exchange_segment": "nse_cm",
+    "symbol": "NESTLEIND",
+    "company_name": "Nestle India Limited",
+    "sector": "FMCG",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1922",
+    "exchange_segment": "nse_cm",
+    "symbol": "INDUSINDBK",
+    "company_name": "IndusInd Bank Limited",
+    "sector": "Banking",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "526",
+    "exchange_segment": "nse_cm",
+    "symbol": "HINDALCO",
+    "company_name": "Hindalco Industries Limited",
+    "sector": "Metals",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2142",
+    "exchange_segment": "nse_cm",
+    "symbol": "BAJAJ_AUTO",
+    "company_name": "Bajaj Auto Limited",
+    "sector": "Automobile",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2475",
+    "exchange_segment": "nse_cm",
+    "symbol": "SHRIRAMFIN",
+    "company_name": "Shriram Finance Limited",
+    "sector": "Financial Services",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "13404",
+    "exchange_segment": "nse_cm",
+    "symbol": "TRENT",
+    "company_name": "Trent Limited",
+    "sector": "Retail",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1729",
+    "exchange_segment": "nse_cm",
+    "symbol": "CIPLA",
+    "company_name": "Cipla Limited",
+    "sector": "Pharmaceuticals",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "857",
+    "exchange_segment": "nse_cm",
+    "symbol": "BPCL",
+    "company_name": "Bharat Petroleum Corporation Limited",
+    "sector": "Oil & Gas",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "467",
+    "exchange_segment": "nse_cm",
+    "symbol": "HEROMOTOCO",
+    "company_name": "Hero MotoCorp Limited",
+    "sector": "Automobile",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "4369",
+    "exchange_segment": "nse_cm",
+    "symbol": "DRREDDY",
+    "company_name": "Dr. Reddy's Laboratories Limited",
+    "sector": "Pharmaceuticals",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2674",
+    "exchange_segment": "nse_cm",
+    "symbol": "APOLLOHOSP",
+    "company_name": "Apollo Hospitals Enterprise Limited",
+    "sector": "Healthcare",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "2863",
+    "exchange_segment": "nse_cm",
+    "symbol": "GODREJCP",
+    "company_name": "Godrej Consumer Products Limited",
+    "sector": "FMCG",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "1076",
+    "exchange_segment": "nse_cm",
+    "symbol": "EICHERMOT",
+    "company_name": "Eicher Motors Limited",
+    "sector": "Automobile",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "14366",
+    "exchange_segment": "nse_cm",
+    "symbol": "DIVISLAB",
+    "company_name": "Divi's Laboratories Limited",
+    "sector": "Pharmaceuticals",
+    "instrument_type": "equity"
+  },
+  {
+    "instrument_token": "11630",
+    "exchange_segment": "nse_cm",
+    "symbol": "LTIM",
+    "company_name": "LTIMindtree Limited",
+    "sector": "Information Technology",
+    "instrument_type": "equity"
+  }
+]

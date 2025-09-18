@@ -1,14 +1,14 @@
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from app.config import app_settings
+from app.settings import settings
 
 templates = Jinja2Templates(directory="app/templates")
 
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {
         "request": request,
-        "poll_interval": app_settings.api_poll_interval * 1000
+        "poll_interval": settings.api_poll_interval * 1000
     })
 
 async def instruments_page(request: Request):

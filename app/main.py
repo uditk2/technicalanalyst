@@ -1,12 +1,20 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.database import init_db
 from app.routes.web import read_root, instruments_page, health_check
 from app.routes.ingestion import start_ingestion, stop_ingestion, get_ingestion_status
+from app.routes.instruments import router as instruments_router
 from app.ingestion.models import KotakAuthRequest
 
 app = FastAPI(title="Stock Feed Ingestion Service", version="1.0.0")
+
+# Include API routers
+app.include_router(instruments_router)
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.on_event("startup")
 async def startup_event():
