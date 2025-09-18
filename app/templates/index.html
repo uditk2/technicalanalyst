@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Feed Ingestion Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            letter-spacing: -0.5px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .section h2 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        input, select, button {
+            padding: 15px 20px;
+            margin: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .secondary-btn {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            border: none;
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+        }
+
+        .secondary-btn:hover {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+        }
+
+        .config-btn {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            border: none;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 15px;
+        }
+
+        .config-btn:hover {
+            background: linear-gradient(135deg, #1976D2, #1565C0);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+
+        .success {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+            color: #4CAF50;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .error {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.1));
+            color: #f44336;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-item {
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .stats-item span {
+            font-weight: 600;
+            color: white;
+        }
+
+        .status-running {
+            color: #4CAF50;
+            font-weight: 700;
+        }
+
+        .status-stopped {
+            color: #f44336;
+            font-weight: 700;
+        }
+
+        .instrument-summary {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instrument-summary h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        #instruments-preview {
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'SF Mono', Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .material-icons {
+            font-size: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .control-group input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .control-group {
+                flex-direction: column;
+            }
+
+            .control-group input,
+            .control-group button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="material-icons" style="font-size: 3rem; margin-right: 15px;">trending_up</span>Stock Feed Ingestion Service</h1>
+
+        <div class="section" id="instrument-section">
+            <h2><span class="material-icons">settings</span>Instrument Selection</h2>
+            <p>Configure which instruments to subscribe to for live market data feed</p>
+
+            <div style="text-align: center; margin: 25px 0;">
+                <button onclick="window.location.href='/instruments'" class="config-btn">
+                    <span class="material-icons">tune</span>
+                    Configure Instruments
+                </button>
+            </div>
+
+            <div class="instrument-summary" id="selected-instruments-summary">
+                <h4><span class="material-icons" style="margin-right: 8px;">playlist_add_check</span>Currently Selected: <span id="instrument-count">Loading...</span></h4>
+                <div id="instruments-preview">
+                    Loading instruments...
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="control-section">
+            <h2><span class="material-icons">play_circle</span>Stock Feed Ingestion</h2>
+            <p>Enter your TOTP code from the Kotak Neo mobile app and start real-time data ingestion</p>
+
+            <div class="control-group">
+                <input type="text" id="kotak-totp" placeholder="Enter 6-digit TOTP code" maxlength="6">
+                <input type="password" id="kotak-mpin" placeholder="Enter 6-digit MPIN (optional)" maxlength="6">
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+                <button onclick="startIngestion()" id="start-btn" class="primary-btn">
+                    <span class="material-icons">play_arrow</span>
+                    Start Ingestion
+                </button>
+                <button onclick="stopIngestion()" id="stop-btn" class="secondary-btn">
+                    <span class="material-icons">stop</span>
+                    Stop Ingestion
+                </button>
+            </div>
+
+            <div id="control-message"></div>
+        </div>
+
+        <div class="section" id="stats-section">
+            <h2><span class="material-icons">analytics</span>Live Statistics</h2>
+            <div class="stats" id="stats-display">
+                <div class="stats-item">
+                    <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">info</span>Status:</span>
+                    <span id="status">Loading...</span>
+                </div>
+                <div class="stats-item">
+                    <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">data_usage</span>Total Processed:</span>
+                    <span id="total-processed">0</span>
+                </div>
+                <div class="stats-item">
+                    <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">memory</span>Buffer Size:</span>
+                    <span id="buffer-size">0</span>
+                </div>
+                <div class="stats-item">
+                    <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">batch_prediction</span>Last Batch Size:</span>
+                    <span id="last-batch-size">0</span>
+                </div>
+                <div class="stats-item">
+                    <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">timer</span>Last Processing Time:</span>
+                    <span id="processing-time">0</span> ms
+                </div>
+                <div class="stats-item">
+                    <span><span class="material-icons" style="font-size: 18px; margin-right: 8px;">schedule</span>Last Processed:</span>
+                    <span id="last-processed">Never</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let statsInterval = null;
+
+        // Load and display selected instruments
+        function loadSelectedInstruments() {
+            const saved = localStorage.getItem('selectedInstruments');
+            const countSpan = document.getElementById('instrument-count');
+            const previewDiv = document.getElementById('instruments-preview');
+
+            if (saved) {
+                const instruments = JSON.parse(saved);
+                countSpan.textContent = instruments.length;
+
+                if (instruments.length > 0) {
+                    previewDiv.innerHTML = instruments.map(inst =>
+                        `${inst.name} (${inst.instrument_token}) - ${getExchangeName(inst.exchange_segment)}`
+                    ).join('<br>');
+                } else {
+                    previewDiv.innerHTML = 'No instruments selected';
+                }
+            } else {
+                countSpan.textContent = '0';
+                previewDiv.innerHTML = 'No instruments configured';
+            }
+        }
+
+        function getExchangeName(segment) {
+            const names = {
+                'nse_cm': 'NSE Cash Market',
+                'bse_cm': 'BSE Cash Market',
+                'nse_fo': 'NSE F&O',
+                'bse_fo': 'BSE F&O',
+                'cde_fo': 'Currency Derivatives',
+                'mcx_fo': 'MCX Derivatives'
+            };
+            return names[segment] || segment;
+        }
+
+        async function startIngestion() {
+            const totpCode = document.getElementById('kotak-totp').value;
+            const mpin = document.getElementById('kotak-mpin').value;
+            const messageDiv = document.getElementById('control-message');
+
+            if (!totpCode || totpCode.length !== 6) {
+                showMessage(messageDiv, 'Please enter a 6-digit TOTP code', 'error');
+                return;
+            }
+
+            // Get selected instruments
+            const saved = localStorage.getItem('selectedInstruments');
+            const selectedInstruments = saved ? JSON.parse(saved) : [];
+
+            try {
+                const response = await fetch('/ingestion/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        totp_code: totpCode,
+                        mpin: mpin || null,
+                        instruments: selectedInstruments
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(messageDiv, result.message, 'success');
+                    startStatsPolling();
+                } else {
+                    showMessage(messageDiv, result.detail || 'Failed to start ingestion', 'error');
+                }
+            } catch (error) {
+                showMessage(messageDiv, 'Network error occurred', 'error');
+            }
+        }
+
+        async function stopIngestion() {
+            const messageDiv = document.getElementById('control-message');
+
+            try {
+                const response = await fetch('/ingestion/stop', {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+                showMessage(messageDiv, result.message, 'success');
+                stopStatsPolling();
+            } catch (error) {
+                showMessage(messageDiv, 'Network error occurred', 'error');
+            }
+        }
+
+        function showMessage(container, message, type) {
+            container.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        async function updateStats() {
+            try {
+                const response = await fetch('/ingestion/status');
+                const stats = await response.json();
+
+                document.getElementById('status').textContent = stats.is_running ? 'Running' : 'Stopped';
+                document.getElementById('status').className = stats.is_running ? 'status-running' : 'status-stopped';
+                document.getElementById('total-processed').textContent = stats.total_processed;
+                document.getElementById('buffer-size').textContent = stats.buffer_size;
+                document.getElementById('last-batch-size').textContent = stats.last_batch_size;
+                document.getElementById('processing-time').textContent = stats.last_processing_time_ms;
+                document.getElementById('last-processed').textContent = stats.last_processed_at
+                    ? new Date(stats.last_processed_at).toLocaleString()
+                    : 'Never';
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+            }
+        }
+
+        function startStatsPolling() {
+            if (statsInterval) clearInterval(statsInterval);
+            statsInterval = setInterval(updateStats, {{ poll_interval }});
+            updateStats();
+        }
+
+        function stopStatsPolling() {
+            if (statsInterval) {
+                clearInterval(statsInterval);
+                statsInterval = null;
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSelectedInstruments();
+            updateStats();
+            startStatsPolling();
+        });
+    </script>
+</body>
+</html>

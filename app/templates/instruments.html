@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrument Selection - Stock Feed Ingestion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .section h2 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .info-section {
+            background: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-section h4 {
+            color: #2196F3;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-section ul {
+            margin: 0;
+            padding-left: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .info-section strong {
+            color: white;
+        }
+
+        input, select, button {
+            padding: 15px 20px;
+            margin: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .instrument-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .preset-instruments {
+            margin-bottom: 25px;
+        }
+
+        .preset-instruments h4 {
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .preset-btn {
+            background: linear-gradient(135deg, rgba(108, 117, 125, 0.3), rgba(108, 117, 125, 0.2));
+            border: 1px solid rgba(108, 117, 125, 0.4);
+            padding: 12px 16px;
+            font-size: 13px;
+            border-radius: 10px;
+            margin: 0;
+        }
+
+        .preset-btn:hover {
+            background: linear-gradient(135deg, rgba(108, 117, 125, 0.5), rgba(108, 117, 125, 0.3));
+        }
+
+        .selected-instruments {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 25px;
+            margin-top: 25px;
+        }
+
+        .selected-instruments h4 {
+            margin-bottom: 20px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instrument-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .instrument-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .instrument-item span {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .instrument-item button {
+            padding: 8px 16px;
+            font-size: 12px;
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            border: none;
+            margin: 0;
+            border-radius: 8px;
+        }
+
+        .instrument-item button:hover {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border: none;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(135deg, #f57c00, #ef6c00);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .action-buttons button {
+            margin: 0 15px;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 15px;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, rgba(108, 117, 125, 0.3), rgba(108, 117, 125, 0.2));
+            border: 1px solid rgba(108, 117, 125, 0.4);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, rgba(108, 117, 125, 0.5), rgba(108, 117, 125, 0.3));
+        }
+
+        .success {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1));
+            color: #4CAF50;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .material-icons {
+            font-size: 20px;
+        }
+
+        .counter-badge {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .empty-state .material-icons {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .instrument-input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .preset-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons button {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .instrument-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .instrument-item button {
+                align-self: flex-end;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="material-icons" style="font-size: 3rem; margin-right: 15px;">tune</span>Instrument Selection</h1>
+        <p class="subtitle">Configure which instruments to subscribe to for live market data feeds</p>
+
+        <div class="info-section">
+            <h4><span class="material-icons">info</span>Exchange Segments</h4>
+            <ul>
+                <li><strong>nse_cm:</strong> NSE Cash Market (Equity stocks)</li>
+                <li><strong>bse_cm:</strong> BSE Cash Market (Equity stocks)</li>
+                <li><strong>nse_fo:</strong> NSE Futures & Options</li>
+                <li><strong>bse_fo:</strong> BSE Futures & Options</li>
+                <li><strong>cde_fo:</strong> Currency Derivatives</li>
+                <li><strong>mcx_fo:</strong> MCX Derivatives (Commodities)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><span class="material-icons">add_circle</span>Add Instruments</h2>
+
+            <div class="instrument-input-group">
+                <input type="text" id="instrument-token" placeholder="Instrument Token (e.g., 11536)" />
+                <select id="exchange-segment">
+                    <option value="nse_cm">NSE Cash Market</option>
+                    <option value="bse_cm">BSE Cash Market</option>
+                    <option value="nse_fo">NSE F&O</option>
+                    <option value="bse_fo">BSE F&O</option>
+                    <option value="cde_fo">Currency Derivatives</option>
+                    <option value="mcx_fo">MCX Derivatives</option>
+                </select>
+                <input type="text" id="instrument-name" placeholder="Name (optional)" />
+                <button onclick="addInstrument()" id="add-instrument-btn">
+                    <span class="material-icons">add</span>
+                    Add
+                </button>
+            </div>
+
+            <div class="preset-instruments">
+                <h4><span class="material-icons">star</span>Popular Instruments</h4>
+                <div class="preset-grid">
+                    <button onclick="addPresetInstrument('11536', 'nse_cm', 'RELIANCE')" class="preset-btn">
+                        <span class="material-icons" style="font-size: 16px; margin-right: 5px;">trending_up</span>
+                        RELIANCE (11536)
+                    </button>
+                    <button onclick="addPresetInstrument('Nifty 50', 'nse_cm', 'Nifty 50')" class="preset-btn">
+                        <span class="material-icons" style="font-size: 16px; margin-right: 5px;">show_chart</span>
+                        Nifty 50
+                    </button>
+                    <button onclick="addPresetInstrument('1594', 'nse_cm', 'TCS')" class="preset-btn">
+                        <span class="material-icons" style="font-size: 16px; margin-right: 5px;">computer</span>
+                        TCS (1594)
+                    </button>
+                    <button onclick="addPresetInstrument('11532', 'nse_cm', 'HDFC Bank')" class="preset-btn">
+                        <span class="material-icons" style="font-size: 16px; margin-right: 5px;">account_balance</span>
+                        HDFC Bank (11532)
+                    </button>
+                    <button onclick="addPresetInstrument('11915', 'nse_cm', 'ICICI Bank')" class="preset-btn">
+                        <span class="material-icons" style="font-size: 16px; margin-right: 5px;">account_balance</span>
+                        ICICI Bank (11915)
+                    </button>
+                    <button onclick="addPresetInstrument('3045', 'nse_cm', 'Infosys')" class="preset-btn">
+                        <span class="material-icons" style="font-size: 16px; margin-right: 5px;">code</span>
+                        Infosys (3045)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="selected-instruments">
+                <h4>
+                    <span class="material-icons">playlist_add_check</span>
+                    Selected Instruments
+                    <span class="counter-badge" id="instrument-count">0</span>
+                </h4>
+                <div id="instruments-list">
+                    <div class="empty-state">
+                        <div class="material-icons">inventory_2</div>
+                        <p>No instruments selected</p>
+                    </div>
+                </div>
+                <button onclick="clearAllInstruments()" id="clear-all-btn" class="clear-btn">
+                    <span class="material-icons">clear_all</span>
+                    Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button onclick="goBack()" class="back-btn">
+                <span class="material-icons">arrow_back</span>
+                Back to Main
+            </button>
+            <button onclick="saveAndContinue()" class="save-btn">
+                <span class="material-icons">save</span>
+                Save & Continue to Ingestion
+            </button>
+        </div>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        let selectedInstruments = [];
+
+        // Load saved instruments from localStorage
+        function loadSavedInstruments() {
+            const saved = localStorage.getItem('selectedInstruments');
+            if (saved) {
+                selectedInstruments = JSON.parse(saved);
+                updateInstrumentsList();
+            }
+        }
+
+        // Save instruments to localStorage
+        function saveInstruments() {
+            localStorage.setItem('selectedInstruments', JSON.stringify(selectedInstruments));
+        }
+
+        // Instrument management functions
+        function addInstrument() {
+            const token = document.getElementById('instrument-token').value.trim();
+            const exchange = document.getElementById('exchange-segment').value;
+            const name = document.getElementById('instrument-name').value.trim() || token;
+
+            if (!token) {
+                alert('Please enter an instrument token');
+                return;
+            }
+
+            // Check if already exists
+            const exists = selectedInstruments.some(inst =>
+                inst.instrument_token === token && inst.exchange_segment === exchange);
+
+            if (exists) {
+                alert('Instrument already selected');
+                return;
+            }
+
+            selectedInstruments.push({
+                instrument_token: token,
+                exchange_segment: exchange,
+                name: name
+            });
+
+            document.getElementById('instrument-token').value = '';
+            document.getElementById('instrument-name').value = '';
+            updateInstrumentsList();
+            saveInstruments();
+        }
+
+        function addPresetInstrument(token, exchange, name) {
+            // Check if already exists
+            const exists = selectedInstruments.some(inst =>
+                inst.instrument_token === token && inst.exchange_segment === exchange);
+
+            if (exists) {
+                alert('Instrument already selected');
+                return;
+            }
+
+            selectedInstruments.push({
+                instrument_token: token,
+                exchange_segment: exchange,
+                name: name
+            });
+
+            updateInstrumentsList();
+            saveInstruments();
+        }
+
+        function removeInstrument(token, exchange) {
+            selectedInstruments = selectedInstruments.filter(inst =>
+                !(inst.instrument_token === token && inst.exchange_segment === exchange));
+            updateInstrumentsList();
+            saveInstruments();
+        }
+
+        function clearAllInstruments() {
+            if (selectedInstruments.length === 0) return;
+
+            if (confirm('Are you sure you want to clear all selected instruments?')) {
+                selectedInstruments = [];
+                updateInstrumentsList();
+                saveInstruments();
+            }
+        }
+
+        function updateInstrumentsList() {
+            const listDiv = document.getElementById('instruments-list');
+            const countBadge = document.getElementById('instrument-count');
+
+            countBadge.textContent = selectedInstruments.length;
+
+            if (selectedInstruments.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="material-icons">inventory_2</div>
+                        <p>No instruments selected</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listDiv.innerHTML = selectedInstruments.map(inst => `
+                <div class="instrument-item" data-token="${inst.instrument_token}" data-exchange="${inst.exchange_segment}">
+                    <span>
+                        <span class="material-icons" style="font-size: 16px; margin-right: 8px; vertical-align: middle;">show_chart</span>
+                        ${inst.name} (${inst.instrument_token}) - ${getExchangeName(inst.exchange_segment)}
+                    </span>
+                    <button onclick="removeInstrument('${inst.instrument_token}', '${inst.exchange_segment}')">
+                        <span class="material-icons" style="font-size: 16px;">remove</span>
+                        Remove
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function getExchangeName(segment) {
+            const names = {
+                'nse_cm': 'NSE Cash Market',
+                'bse_cm': 'BSE Cash Market',
+                'nse_fo': 'NSE F&O',
+                'bse_fo': 'BSE F&O',
+                'cde_fo': 'Currency Derivatives',
+                'mcx_fo': 'MCX Derivatives'
+            };
+            return names[segment] || segment;
+        }
+
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        function saveAndContinue() {
+            if (selectedInstruments.length === 0) {
+                alert('Please select at least one instrument before continuing');
+                return;
+            }
+
+            saveInstruments();
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = '<div class="success"><span class="material-icons" style="margin-right: 8px;">check_circle</span>Instruments saved successfully! Redirecting to main page...</div>';
+
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1500);
+        }
+
+        // Handle Enter key in input fields
+        document.getElementById('instrument-token').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addInstrument();
+        });
+
+        document.getElementById('instrument-name').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addInstrument();
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedInstruments();
+        });
+    </script>
+</body>
+</html>
