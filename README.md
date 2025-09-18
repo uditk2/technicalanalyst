@@ -1,4 +1,4 @@
-# Stock Feed Ingestion Service
+# Technical Analyst
 
 A FastAPI-based service for ingesting real-time stock feed data into TimescaleDB with TOTP authentication and monitoring dashboard.
 

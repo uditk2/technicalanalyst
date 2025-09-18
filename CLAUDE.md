@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a FastAPI-based stock feed ingestion service that collects real-time stock data from Kotak Neo WebSocket API and stores it in TimescaleDB. The application provides both web UI and REST API endpoints for monitoring and managing stock data ingestion.
+This is a FastAPI-based technical analyst service that collects real-time stock data from Kotak Neo WebSocket API and stores it in TimescaleDB. The application provides both web UI and REST API endpoints for monitoring and managing stock data ingestion.
 
 ## Development Commands
 

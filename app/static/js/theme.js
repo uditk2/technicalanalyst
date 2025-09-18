@@ -1,5 +1,5 @@
 /**
- * Stock Feed Ingestion Service - Theme JavaScript
+ * Technical Analyst - Theme JavaScript
  * Provides common functionality across all pages
  */
 

@@ -8,7 +8,7 @@ from app.routes.ingestion import start_ingestion, stop_ingestion, get_ingestion_
 from app.routes.instruments import router as instruments_router
 from app.ingestion.models import KotakAuthRequest
 
-app = FastAPI(title="Stock Feed Ingestion Service", version="1.0.0")
+app = FastAPI(title="Technical Analyst", version="1.0.0")
 
 # Include API routers
 app.include_router(instruments_router)

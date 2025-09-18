@@ -36,7 +36,7 @@ class DataBuffer:
 
 class StockFeedIngestionService:
     """
-    Stock feed ingestion service with async processing and thread-safe WebSocket bridge.
+    Technical analyst service with async processing and thread-safe WebSocket bridge.
 
     Architecture:
     WebSocket (sync) -> message_queue -> async processing -> buffer -> database
@@ -215,7 +215,7 @@ class StockFeedIngestionService:
 
         self.is_running = True
         self.feed_source = "websocket"
-        logger.info("Starting WebSocket stock feed ingestion service...")
+        logger.info("Starting WebSocket technical analyst service...")
 
         try:
             while self.is_running:
@@ -235,7 +235,7 @@ class StockFeedIngestionService:
 
         self.is_running = True
         self.feed_source = "file"
-        logger.info(f"Starting file-based stock feed ingestion service from {file_path}...")
+        logger.info(f"Starting file-based technical analyst service from {file_path}...")
 
         try:
             await self.process_file_data(file_path)
@@ -257,7 +257,7 @@ class StockFeedIngestionService:
         if self.feed_source == "websocket":
             kotak_subscriber.unsubscribe_from_instruments()
 
-        logger.info("Stock feed ingestion service stopped")
+        logger.info("Technical analyst service stopped")
 
     async def get_stats(self) -> Dict[str, Any]:
         async with SessionLocal() as session:
